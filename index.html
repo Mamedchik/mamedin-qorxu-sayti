@@ -1,96 +1,101 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Qorxu Saytı - Səssiz ol hər an pəncərədən vəya qapıdan ani giriş edə bilər...</title>
+<meta charset="utf-8" />
+<title>Qorxu Saytı</title>
 <style>
   body {
-    margin: 0; padding: 0;  
+    margin: 0; padding: 0;
     background: black;
     color: red;
-    font-family: 'Courier New', Courier, monospace;
-    overflow: hidden;
+    font-family: monospace;
+    text-align: center;
     user-select: none;
+    overflow: hidden;
   }
   #title {
-    font-size: 3em;
-    text-align: center;
-    margin-top: 40vh;
-    text-shadow: 0 0 20px red;
+    margin-top: 30vh;
+    font-size: 1.8em;
+    min-height: 3em;
   }
   #scareBtn {
-    display: block;
-    margin: 40px auto;
-    font-size: 2em;
+    margin: 30px auto;
     padding: 20px 40px;
+    font-size: 1.8em;
     background: darkred;
-    border: none;
-    border-radius: 10px;
     color: white;
-    cursor: pointer;
+    border: none;
+    border-radius: 8px;
     box-shadow: 0 0 15px red;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  #scareBtn:hover {
+    background: crimson;
   }
   #scaryEye {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 200px;
-    height: 200px;
-    margin-left: -100px;
-    margin-top: -100px;
     display: none;
-    animation: blink 0.7s infinite;
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 220px; height: 220px;
+    margin: -110px 0 0 -110px;
     z-index: 9999;
+    animation: blink 0.8s infinite;
   }
   @keyframes blink {
-    0%, 100% {opacity: 1;}
-    50% {opacity: 0.1;}
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.1; }
   }
-  @keyframes shake {
-    0% {transform: translate(1px, 1px) rotate(0deg);}
-    10% {transform: translate(-1px, -2px) rotate(-1deg);}
-    20% {transform: translate(-3px, 0px) rotate(1deg);}
-    30% {transform: translate(3px, 2px) rotate(0deg);}
-    40% {transform: translate(1px, -1px) rotate(1deg);}
-    50% {transform: translate(-1px, 2px) rotate(-1deg);}
-    60% {transform: translate(-3px, 1px) rotate(0deg);}
-    70% {transform: translate(3px, 1px) rotate(-1deg);}
-    80% {transform: translate(-1px, -1px) rotate(1deg);}
-    90% {transform: translate(1px, 2px) rotate(0deg);}
-    100% {transform: translate(1px, -2px) rotate(-1deg);}
+  .shake {
+    animation: shakeAnim 0.6s;
   }
-  .shakeScreen {
-    animation: shake 0.5s;
+  @keyframes shakeAnim {
+    0% { transform: translate(2px,1px) rotate(0); }
+    25% { transform: translate(-2px,-1px) rotate(-1deg); }
+    50% { transform: translate(2px,-2px) rotate(1deg); }
+    75% { transform: translate(-2px,2px) rotate(-1deg); }
+    100% { transform: translate(2px,-1px) rotate(0); }
   }
 </style>
 </head>
 <body>
-<h1 id="title">Eehh...  Hardan bile bilerikki? Belkede bu deqiqe eve girib arxandada ola bilər..
-</h1>
-<button id="scareBtn">Qorxunu aç</button>
-<img id="scaryEye" src="https://i.ibb.co/3p5XbX0/scary-eye.png" alt="Qorxulu Göz" />
-<audio id="screamAudio" preload="auto" src="scream.mp3"></audio>
+  <h1 id="title"></h1>
+  <button id="scareBtn">Gəl, ruhunu sikim...</button>
+  <img id="scaryEye" src="https://i.ibb.co/3p5XbX0/scary-eye.png" alt="Scary Eye" />
+  <audio id="screamAudio" src="scream.mp3" preload="auto"></audio>
 
-<script>
-  const btn = document.getElementById('scareBtn');
-  const audio = document.getElementById('screamAudio');
-  const eye = document.getElementById('scaryEye');
-  const body = document.body;
+  <script>
+    const btn = document.getElementById('scareBtn');
+    const title = document.getElementById('title');
+    const eye = document.getElementById('scaryEye');
+    const audio = document.getElementById('screamAudio');
+    const body = document.body;
 
-  btn.addEventListener('click', () => {
-    eye.style.display = 'block';
-    audio.play();
+    // İlkin yazı boşdur
+    title.textContent = "";
 
-    // Ekranı titrətmək üçün klass əlavə et
-    body.classList.add('shakeScreen');
+    btn.addEventListener('click', () => {
+      // Ekranda o cümləni göstər
+      title.textContent = "Qorxma deyirlər... amma sənin kimi boş bir bədəni qorxudan başqa heç nə doldurmur.";
 
-    // 3 saniyədən sonra göz gizlənsin və titrəmə bitsin
-    setTimeout(() => {
-      eye.style.display = 'none';
-      body.classList.remove('shakeScreen');
-    }, 3000);
-  });
-</script>
+      // Qorxulu göz çıxır
+      eye.style.display = 'block';
+
+      // Titrəmə effekti
+      body.classList.add('shake');
+
+      // Səs açılır
+      audio.play();
+
+      // Buton mətni dəyişmir, istəsən dəyişə bilərsən
+
+      // 3 saniyədən sonra geri qaytarırıq
+      setTimeout(() => {
+        eye.style.display = 'none';
+        body.classList.remove('shake');
+        title.textContent = "";
+      }, 3000);
+    });
+  </script>
 </body>
 </html>
