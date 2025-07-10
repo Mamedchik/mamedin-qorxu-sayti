@@ -1,101 +1,134 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="utf-8" />
-<title>Qorxu Saytı</title>
-<style>
-  body {
-    margin: 0; padding: 0;
-    background: black;
-    color: red;
-    font-family: monospace;
-    text-align: center;
-    user-select: none;
-    overflow: hidden;
-  }
-  #title {
-    margin-top: 30vh;
-    font-size: 1.8em;
-    min-height: 3em;
-  }
-  #scareBtn {
-    margin: 30px auto;
-    padding: 20px 40px;
-    font-size: 1.8em;
-    background: darkred;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 0 15px red;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  #scareBtn:hover {
-    background: crimson;
-  }
-  #scaryEye {
-    display: none;
-    position: fixed;
-    top: 50%; left: 50%;
-    width: 220px; height: 220px;
-    margin: -110px 0 0 -110px;
-    z-index: 9999;
-    animation: blink 0.8s infinite;
-  }
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.1; }
-  }
-  .shake {
-    animation: shakeAnim 0.6s;
-  }
-  @keyframes shakeAnim {
-    0% { transform: translate(2px,1px) rotate(0); }
-    25% { transform: translate(-2px,-1px) rotate(-1deg); }
-    50% { transform: translate(2px,-2px) rotate(1deg); }
-    75% { transform: translate(-2px,2px) rotate(-1deg); }
-    100% { transform: translate(2px,-1px) rotate(0); }
-  }
-</style>
+  <meta charset="UTF-8">
+  <title>Qorxu Saytı</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      color: red;
+      font-family: 'Courier New', monospace;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    #content {
+      margin-top: 25vh;
+      font-size: 1.5em;
+    }
+
+    #countdown {
+      font-size: 4em;
+      margin-top: 15px;
+    }
+
+    #scareBtn {
+      padding: 20px 40px;
+      font-size: 1.5em;
+      background: darkred;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 20px red;
+      cursor: pointer;
+    }
+
+    #overlay, #jumpscare {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: black;
+      z-index: 9999;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #jumpscare video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+    }
+
+    .glitching {
+      animation: glitch 0.1s infinite;
+    }
+
+    @keyframes glitch {
+      0% { background-color: black; color: red; }
+      25% { background-color: #111; color: white; }
+      50% { background-color: red; color: black; }
+      75% { background-color: #222; color: #0f0; }
+      100% { background-color: black; color: red; }
+    }
+  </style>
 </head>
 <body>
-  <h1 id="title"></h1>
-  <button id="scareBtn">Gəl, ruhunu sikim...</button>
-  <img id="scaryEye" src="https://i.ibb.co/3p5XbX0/scary-eye.png" alt="Scary Eye" />
-  <audio id="screamAudio" src="scream.mp3" preload="auto"></audio>
+
+  <div id="content">
+    <p id="text"></p>
+    <div id="countdown"></div>
+    <button id="scareBtn">Gəl, ruhunu sikim...</button>
+  </div>
+
+  <div id="overlay"></div>
+
+  <div id="jumpscare">
+    <video id="jumpVideo" src="jumpscare.mp4" autoplay muted></video>
+  </div>
+
+  <audio id="scream" src="scream.mp3" preload="auto"></audio>
 
   <script>
-    const btn = document.getElementById('scareBtn');
-    const title = document.getElementById('title');
-    const eye = document.getElementById('scaryEye');
-    const audio = document.getElementById('screamAudio');
-    const body = document.body;
+    const scareBtn = document.getElementById('scareBtn');
+    const text = document.getElementById('text');
+    const countdown = document.getElementById('countdown');
+    const scream = document.getElementById('scream');
+    const overlay = document.getElementById('overlay');
+    const jumpscare = document.getElementById('jumpscare');
+    const jumpVideo = document.getElementById('jumpVideo');
 
-    // İlkin yazı boşdur
-    title.textContent = "";
+    scareBtn.addEventListener('click', () => {
+      scareBtn.style.display = "none";
+      text.textContent = "Qorxma deyirlər... amma sənin kimi boş bir bədəni qorxudan başqa heç nə doldurmur.";
 
-    btn.addEventListener('click', () => {
-      // Ekranda o cümləni göstər
-      title.textContent = "Qorxma deyirlər... amma sənin kimi boş bir bədəni qorxudan başqa heç nə doldurmur.";
+      let count = 3;
+      countdown.textContent = count;
 
-      // Qorxulu göz çıxır
-      eye.style.display = 'block';
+      const interval = setInterval(() => {
+        count--;
+        if (count > 1) {
+          countdown.textContent = count;
+        } else if (count === 1) {
+          clearInterval(interval);
+          countdown.textContent = "1";
 
-      // Titrəmə effekti
-      body.classList.add('shake');
+          scream.play();
 
-      // Səs açılır
-      audio.play();
+          setTimeout(() => {
+            document.body.classList.add("glitching");
+            overlay.style.display = "block";
+          }, 1000);
 
-      // Buton mətni dəyişmir, istəsən dəyişə bilərsən
+          setTimeout(() => {
+            document.body.classList.remove("glitching");
+            overlay.style.display = "none";
+            jumpscare.style.display = "flex";
+            jumpVideo.play();
+          }, 4000);
 
-      // 3 saniyədən sonra geri qaytarırıq
-      setTimeout(() => {
-        eye.style.display = 'none';
-        body.classList.remove('shake');
-        title.textContent = "";
-      }, 3000);
+          setTimeout(() => {
+            jumpscare.style.display = "none";
+            text.textContent = "";
+            countdown.textContent = "";
+            scareBtn.style.display = "block";
+          }, 7000);
+        }
+      }, 1000);
     });
   </script>
+
 </body>
 </html>
