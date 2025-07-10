@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-  <meta charset="UTF-8">
-  <title>Qorxu Saytı</title>
+  <meta charset="UTF-8" />
+  <title>arkadaşlık-testi</title>
   <style>
     body {
-      margin: 0;
-      padding: 0;
+      margin: 0; padding: 0;
       background: black;
       color: red;
       font-family: 'Courier New', monospace;
       text-align: center;
       overflow: hidden;
     }
-
     #content {
       margin-top: 25vh;
       font-size: 1.5em;
     }
-
     #countdown {
       font-size: 4em;
       margin-top: 15px;
     }
-
     #scareBtn {
       padding: 20px 40px;
       font-size: 1.5em;
@@ -34,7 +30,6 @@
       box-shadow: 0 0 20px red;
       cursor: pointer;
     }
-
     #overlay, #jumpscare {
       position: fixed;
       top: 0; left: 0;
@@ -45,17 +40,14 @@
       justify-content: center;
       align-items: center;
     }
-
     #jumpscare video {
       width: 100vw;
       height: 100vh;
       object-fit: cover;
     }
-
     .glitching {
       animation: glitch 0.1s infinite;
     }
-
     @keyframes glitch {
       0% { background-color: black; color: red; }
       25% { background-color: #111; color: white; }
@@ -70,7 +62,7 @@
   <div id="content">
     <p id="text"></p>
     <div id="countdown"></div>
-    <button id="scareBtn">Gəl, ruhunu sikim...</button>
+    <button id="scareBtn">Testə Başla💀</button>
   </div>
 
   <div id="overlay"></div>
@@ -105,26 +97,27 @@
           clearInterval(interval);
           countdown.textContent = "1";
 
-          scream.play();
-
           setTimeout(() => {
-            document.body.classList.add("glitching");
+            scream.play();
             overlay.style.display = "block";
-          }, 1000);
+            document.body.classList.add("glitching");
 
-          setTimeout(() => {
-            document.body.classList.remove("glitching");
-            overlay.style.display = "none";
-            jumpscare.style.display = "flex";
-            jumpVideo.play();
-          }, 4000);
+            setTimeout(() => {
+              document.body.classList.remove("glitching");
+              overlay.style.display = "none";
+              jumpscare.style.display = "flex";
+              jumpVideo.play();
 
-          setTimeout(() => {
-            jumpscare.style.display = "none";
-            text.textContent = "";
-            countdown.textContent = "";
-            scareBtn.style.display = "block";
-          }, 7000);
+              setTimeout(() => {
+                jumpscare.style.display = "none";
+                text.textContent = "";
+                countdown.textContent = "";
+                scareBtn.style.display = "block";
+              }, 3000);
+
+            }, 3000);
+
+          }, 3000); // 3 saniyə dayanma
         }
       }, 1000);
     });
